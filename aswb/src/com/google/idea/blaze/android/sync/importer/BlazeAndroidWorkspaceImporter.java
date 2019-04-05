@@ -101,11 +101,6 @@ public final class BlazeAndroidWorkspaceImporter {
     ImmutableList<AndroidResourceModule> androidResourceModules =
         buildAndroidResourceModules(resourceModules.build());
 
-    if (!input.createFakeAarLibrariesExperiment) {
-      addImportAarLibraries(input.createSourceFilter().getLibraryTargets(), libraries);
-      addResourceModuleResourceLibrary(androidResourceModules, libraries);
-    }
-
     return new BlazeAndroidImportResult(
         androidResourceModules,
         libraries.getBlazeResourceLibs(),
@@ -175,13 +170,11 @@ public final class BlazeAndroidWorkspaceImporter {
         if (!resourceDependency.equals(target.getKey())) {
           builder.addTransitiveResourceDependency(resourceDependency);
           TargetIdeInfo dependencyTarget = input.targetMap.get(resourceDependency);
-          if (input.createFakeAarLibrariesExperiment) {
-            String libraryKey = libraryFactory.createAarLibrary(dependencyTarget);
-            if (libraryKey != null) {
-              ArtifactLocation artifactLocation = dependencyTarget.getAndroidAarIdeInfo().getAar();
-              if (isSourceOrWhitelistedGenPath(artifactLocation, whitelistTester)) {
-                builder.addResourceLibraryKey(libraryKey);
-              }
+          String libraryKey = libraryFactory.createAarLibrary(dependencyTarget);
+          if (libraryKey != null) {
+            ArtifactLocation artifactLocation = dependencyTarget.getAndroidAarIdeInfo().getAar();
+            if (isSourceOrWhitelistedGenPath(artifactLocation, whitelistTester)) {
+              builder.addResourceLibraryKey(libraryKey);
             }
           }
         }

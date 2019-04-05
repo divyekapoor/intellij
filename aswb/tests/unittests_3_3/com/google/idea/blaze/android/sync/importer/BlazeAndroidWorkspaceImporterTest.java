@@ -183,9 +183,6 @@ public class BlazeAndroidWorkspaceImporterTest extends BlazeTestCase {
       TargetMapBuilder targetMapBuilder,
       ProjectView projectView,
       boolean createAarLibrary) {
-    ((MockExperimentService) ExperimentService.getInstance())
-        .setExperiment(BlazeImportInput.createLooksLikeAarLibrary, createAarLibrary);
-
     ProjectViewSet projectViewSet = ProjectViewSet.builder().add(projectView).build();
     TargetMap targetMap = targetMapBuilder.build();
     BlazeAndroidWorkspaceImporter workspaceImporter =
